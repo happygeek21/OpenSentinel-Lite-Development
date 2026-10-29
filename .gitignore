@@ -1,0 +1,24 @@
+# Python
+venv/
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Local Database & Logs
+data/*.log
+data/*.db
+!data/.gitkeep
+
+# Frontend Node dependencies & build
+frontend/node_modules/
+frontend/dist/
+frontend/dist-ssr/
+frontend/*.local
+
+# OS & IDE
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
