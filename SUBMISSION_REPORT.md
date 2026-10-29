@@ -188,3 +188,4 @@ python backend/scanner.py
 ## 5. Conclusion
 
 By building **OpenSentinel Lite** (Task 13) and systematically evaluating and refining its detection heuristics (Task 9), this project provides a complete, verifiable cybersecurity deliverable. The implementation combines software engineering rigor with defensive security principles, backed by automated unit tests and benchmark reports.
+

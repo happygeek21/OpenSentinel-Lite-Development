@@ -1,8 +1,7 @@
-"""Parse OpenSentinel's legacy and refined pipe-delimited log formats."""
 
 
 def parse_log(line):
-    """Return a normalized event dictionary, or ``None`` for malformed input."""
+
 
     parts = [part.strip() for part in line.strip().split("|")]
     if len(parts) < 4:
@@ -31,7 +30,7 @@ def parse_log(line):
         elif key == "details":
             event["details"] = value.strip()
 
-    # Legacy records used the event field for SUCCESS/FAILED status.
+
     if not event["status"] and event["event"] in {"SUCCESS", "FAILED"}:
         event["status"] = event["event"]
         event["event"] = "LOGIN"

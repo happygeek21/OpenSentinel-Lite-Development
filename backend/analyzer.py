@@ -8,10 +8,6 @@ DB = "data/opensentinel.db"
 create_database()
 
 
-# --------------------------------------------------
-# SQL INJECTION PATTERNS
-# --------------------------------------------------
-
 SQLI_PATTERNS = [
     "' or ",
     '" or ',
@@ -41,10 +37,7 @@ RECON_PATTERNS = [
 
 
 def detect_sql_injection(details):
-    """
-    Detect common SQL injection patterns
-    inside logged request details.
-    """
+
 
     if not details:
         return False
@@ -76,17 +69,8 @@ def classify_event(event):
     return "NORMAL", 0
 
 
-# --------------------------------------------------
-# ALERT DATABASE FUNCTIONS
-# --------------------------------------------------
-
 def update_alert(alert):
-    """
-    Update an existing alert for the same
-    threat type and source IP.
 
-    Returns True if an existing alert was updated.
-    """
 
     conn = sqlite3.connect(DB)
     cursor = conn.cursor()
@@ -127,10 +111,6 @@ def update_alert(alert):
     return updated > 0
 
 
-# --------------------------------------------------
-# MAIN ANALYZER
-# --------------------------------------------------
-
 def analyze_logs():
 
     conn = sqlite3.connect(DB)
@@ -157,7 +137,7 @@ def analyze_logs():
 
     total = len(events)
 
-    # Annotate raw events so the live monitor can show risk without inventing data.
+
     update_conn = sqlite3.connect(DB)
     update_cursor = update_conn.cursor()
     for event in events:
@@ -169,9 +149,6 @@ def analyze_logs():
     update_conn.commit()
     update_conn.close()
 
-    # --------------------------------------------------
-    # 1. BRUTE FORCE DETECTION
-    # --------------------------------------------------
 
     for event in events:
 
@@ -187,7 +164,6 @@ def analyze_logs():
 
         if count >= 5:
 
-            # Risk scoring for brute-force attacks
 
             if count >= 10:
                 risk = 95
@@ -223,14 +199,10 @@ def analyze_logs():
 
             alerts.append(alert)
 
-            # Update existing alert or create a new one
 
             if not update_alert(alert):
                 save_alert(alert)
 
-    # --------------------------------------------------
-    # 2. SQL INJECTION DETECTION
-    # --------------------------------------------------
 
     for event in events:
 
@@ -245,13 +217,9 @@ def analyze_logs():
             key = (event["source_ip"], event["username"])
             recon_attempts[key] = recon_attempts.get(key, 0) + 1
 
-    # --------------------------------------------------
-    # 3. SQL INJECTION RISK SCORING
-    # --------------------------------------------------
 
     for (ip, username), count in sql_attempts.items():
 
-        # Risk increases with repeated attempts
 
         if count >= 3:
             risk = 90
@@ -289,12 +257,11 @@ def analyze_logs():
 
         alerts.append(alert)
 
-        # Update existing alert or create a new one
 
         if not update_alert(alert):
             save_alert(alert)
 
-    # Recon alerts use the same correlation model as SQL injection and brute force.
+
     for (ip, username), count in recon_attempts.items():
         risk = 75 if count >= 3 else 60
         severity = "HIGH" if count >= 3 else "MEDIUM"
@@ -323,9 +290,6 @@ def analyze_logs():
         if not update_alert(alert):
             save_alert(alert)
 
-    # --------------------------------------------------
-    # 4. RETURN ANALYSIS RESULT
-    # --------------------------------------------------
 
     if alerts:
 
@@ -341,10 +305,6 @@ def analyze_logs():
         "alerts": [],
     }
 
-
-# --------------------------------------------------
-# COMMAND LINE EXECUTION
-# --------------------------------------------------
 
 if __name__ == "__main__":
     print(analyze_logs())

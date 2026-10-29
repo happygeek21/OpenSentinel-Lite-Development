@@ -2,7 +2,7 @@ import os
 import sys
 from pathlib import Path
 
-# Add project root to sys.path so backend module can be imported
+
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 try:
@@ -23,7 +23,6 @@ result = analyze_logs()
 
 
 print(result)
-
 
 
 if result["status"] == "ALERT":

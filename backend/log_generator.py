@@ -1,9 +1,4 @@
-"""Generate realistic local security events for the OpenSentinel demo.
 
-The generator writes the refined pipe-delimited file format and, by default,
-persists the same events to SQLite so the live dashboard can observe them.
-It never executes the generated search strings.
-"""
 
 from __future__ import annotations
 

@@ -1,11 +1,4 @@
-"""Unit and integration tests for OpenSentinel Lite (Assessment Task 13: Build a Small Defensive Security Tool).
 
-Verifies:
-1. Log parsing (pipe-delimited and legacy formats).
-2. Threat detection classification (Normal, Recon, SQLi, Brute Force).
-3. SQLite database persistence and alert storage.
-4. End-to-end scanner pipeline.
-"""
 
 import os
 import sys
@@ -14,7 +7,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-# Add project root to sys.path
+
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from backend.parser import parse_log
@@ -23,7 +16,7 @@ from backend import database
 
 
 class TestLogParser(unittest.TestCase):
-    """Verifies log parsing and normalization."""
+
 
     def test_parse_valid_event(self):
         line = "2026-10-29T10:00:00 | LOGIN | user=alice | ip=192.168.1.10 | status=SUCCESS | details=Login ok"
@@ -50,7 +43,7 @@ class TestLogParser(unittest.TestCase):
 
 
 class TestThreatClassification(unittest.TestCase):
-    """Verifies rule-based threat detection logic."""
+
 
     def test_detect_sql_injection(self):
         self.assertTrue(detect_sql_injection("' OR 1=1 --"))
@@ -85,7 +78,7 @@ class TestThreatClassification(unittest.TestCase):
 
 
 class TestDatabasePersistence(unittest.TestCase):
-    """Verifies alert and event database operations."""
+
 
     def setUp(self):
         self.temp_dir = tempfile.TemporaryDirectory()
@@ -121,7 +114,7 @@ class TestDatabasePersistence(unittest.TestCase):
         self.assertEqual(row["ip"], "192.168.1.50")
         self.assertEqual(row["risk_score"], 90)
 
-        # Check notification was also created
+
         cursor.execute("SELECT * FROM notifications WHERE alert_id = ?", (row["id"],))
         notification = cursor.fetchone()
         self.assertIsNotNone(notification)
