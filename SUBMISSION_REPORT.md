@@ -155,26 +155,25 @@ IMPROVED_SQLI_PATTERNS = [
 ### 4.2 Run Test Suites
 To verify both Task 13 and Task 9 automated test cases:
 ```bash
-# 1. Activate Python virtual environment
 .\venv\Scripts\activate
-
-# 2. Run all unit tests
 python -m unittest discover -s tests -p "test_*.py" -v
-
-# 3. Run the Detection Rule benchmark
 python tests/test_detection_rules.py
 ```
 
 ### 4.3 Launch the Defensive Security Tool
+Terminal 1 - Backend API Server:
 ```bash
-# Terminal 1 - Backend API Server
 python -m uvicorn backend.main:app --host 127.0.0.1 --port 8000 --reload
+```
 
-# Terminal 2 - Frontend Web Dashboard
+Terminal 2 - Frontend Web Dashboard:
+```bash
 cd frontend
 npm run dev
+```
 
-# Terminal 3 - Generate Sample Security Logs
+Terminal 3 - Generate Sample Security Logs:
+```bash
 python -m backend.log_generator --interval 0
 python backend/scanner.py
 ```

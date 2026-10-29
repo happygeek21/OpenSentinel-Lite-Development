@@ -35,26 +35,26 @@ Detailed findings, methodology, and evaluation metrics are documented in [`SUBMI
 ```text
 OpenSentinel-Lite/
 ├── backend/
-│   ├── analyzer.py        # Threat detection heuristics and risk scoring
-│   ├── auth.py            # User authentication and admin password hashing (bcrypt)
-│   ├── database.py        # SQLite schema, migrations, and alert persistence
-│   ├── event_logger.py    # Standardized event logger
-│   ├── log_generator.py   # Synthetic security log generator
-│   ├── main.py            # FastAPI REST API endpoints
-│   ├── parser.py          # Pipe-delimited log parser
-│   └── scanner.py         # Standalone CLI security scanner
-├── frontend/              # Vite + React real-time security dashboard
-│   ├── src/               # React components, styles, and API integrations
+│   ├── analyzer.py
+│   ├── auth.py
+│   ├── database.py
+│   ├── event_logger.py
+│   ├── log_generator.py
+│   ├── main.py
+│   ├── parser.py
+│   └── scanner.py
+├── frontend/
+│   ├── src/
 │   └── package.json
 ├── tests/
-│   ├── test_defensive_tool.py    # Unit tests for parsing, detection & database
-│   └── test_detection_rules.py   # Task 9 detection rule benchmark suite
-├── reports/               # Automated test execution outputs
+│   ├── test_defensive_tool.py
+│   └── test_detection_rules.py
+├── reports/
 │   ├── detection_rule_benchmark.txt
 │   └── unit_test_results.txt
-├── requirements.txt       # Backend dependencies
-├── README.md              # Project documentation
-└── SUBMISSION_REPORT.md   # Formal assessment submission report
+├── requirements.txt
+├── README.md
+└── SUBMISSION_REPORT.md
 ```
 
 ---
@@ -66,7 +66,7 @@ OpenSentinel-Lite/
 Create virtual environment and install dependencies:
 ```bash
 python -m venv venv
-.\venv\Scripts\activate       # On Windows (or: source venv/bin/activate on Linux/macOS)
+.\venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
@@ -95,10 +95,7 @@ npm run dev
 
 Generate synthetic security events:
 ```bash
-# Generate immediate sequence of normal, SQLi, recon, and brute-force events
 python -m backend.log_generator --interval 0
-
-# Run scanner manually
 python backend/scanner.py
 ```
 
@@ -107,10 +104,7 @@ python backend/scanner.py
 ### 4. Run Automated Test Suites
 
 ```bash
-# Run all unit tests (Task 13 verification)
 python -m unittest discover -s tests -p "test_*.py" -v
-
-# Run Detection Rule Benchmark (Task 9 verification)
 python tests/test_detection_rules.py
 ```
 

@@ -24,23 +24,17 @@ def set_cell_background(cell, fill_hex):
 
 def build_docx(output_path: Path):
     doc = docx.Document()
-
-    # Set normal style
     style = doc.styles['Normal']
     font = style.font
     font.name = 'Calibri'
     font.size = Pt(11)
     font.color.rgb = RGBColor(0x22, 0x22, 0x22)
-
-    # Title
     title = doc.add_paragraph()
     r_title = title.add_run("Cybersecurity Assessment Submission Report")
     r_title.bold = True
     r_title.font.size = Pt(24)
     r_title.font.color.rgb = RGBColor(0x1a, 0x36, 0x5d) # Navy
     title.paragraph_format.space_after = Pt(4)
-
-    # Subtitle / Candidate Info
     meta = doc.add_paragraph()
     meta.add_run("Candidate Name: ").bold = True
     meta.add_run("Hemanth Prabhu\n")
@@ -109,8 +103,6 @@ def build_docx(output_path: Path):
     )
 
     doc.add_heading("3.2 Quantitative Benchmark Results", level=2)
-
-    # Table
     table = doc.add_table(rows=1, cols=5)
     table.alignment = WD_TABLE_ALIGNMENT.CENTER
     hdr_cells = table.rows[0].cells
@@ -208,29 +200,20 @@ def build_html(output_path: Path):
 
 def package_google_drive_folder():
     SUBMISSION_DIR.mkdir(parents=True, exist_ok=True)
-
-    # 1. Generate DOCX and HTML reports
     docx_path = SUBMISSION_DIR / "Cybersecurity_Assessment_Report_Hemanth_Prabhu.docx"
     html_path = SUBMISSION_DIR / "Cybersecurity_Assessment_Report_Hemanth_Prabhu.html"
     build_docx(docx_path)
     build_html(html_path)
-
-    # 2. Copy benchmark reports
     reports_target = SUBMISSION_DIR / "Benchmark_and_Test_Reports"
     reports_target.mkdir(exist_ok=True)
     shutil.copy2(PROJECT_ROOT / "reports" / "detection_rule_benchmark.txt", reports_target)
     shutil.copy2(PROJECT_ROOT / "reports" / "unit_test_results.txt", reports_target)
-
-    # 3. Copy README and Markdown report
     shutil.copy2(PROJECT_ROOT / "SUBMISSION_REPORT.md", SUBMISSION_DIR)
     shutil.copy2(PROJECT_ROOT / "README.md", SUBMISSION_DIR)
-
-    # 4. Create clean Source Code ZIP
     zip_dest = SUBMISSION_DIR / "OpenSentinel-Lite-SourceCode.zip"
     print("Creating clean source code zip...")
     with zipfile.ZipFile(zip_dest, "w", zipfile.ZIP_DEFLATED) as zf:
         for root, dirs, files in os.walk(PROJECT_ROOT):
-            # Exclude virtual envs, node_modules, git, and build artifacts
             dirs[:] = [d for d in dirs if d not in {"venv", ".venv", "node_modules", "dist", "__pycache__", ".git"}]
             for file in files:
                 if file.endswith((".pyc", ".db", ".log")) or file == "OpenSentinel-Lite-SourceCode.zip":
@@ -238,8 +221,6 @@ def package_google_drive_folder():
                 file_path = Path(root) / file
                 rel_path = file_path.relative_to(PROJECT_ROOT)
                 zf.write(file_path, rel_path)
-
-    # 5. Create Submission_Info.txt
     info_text = """CYBERSECURITY ASSESSMENT SUBMISSION
 =====================================================
 Student Name: Hemanth Prabhu
